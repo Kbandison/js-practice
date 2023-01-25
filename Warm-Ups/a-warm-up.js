@@ -475,11 +475,9 @@ const users = [
 /*******FILTER BY GENDER**********/
 
 function filterByGender(gender) {
-  let filteredUsers = users.filter((user) => {
-    return user.gender === gender ? true : false;
+  return users.filter((user) => {
+    return user.gender === gender;
   });
-
-  return filteredUsers;
 }
 
 // console.log(filterByGender("male"));
@@ -489,11 +487,9 @@ function filterByGender(gender) {
 /*******FILTER BY AGE************/
 
 function filterByAge(age) {
-  let filteredAges = users.filter((user) => {
-    return user.dob.age > age ? true : false;
+  return users.filter((user) => {
+    return user.dob.age > age;
   });
-
-  return filteredAges;
 }
 
 // console.log(filterByAge(50));
@@ -504,8 +500,8 @@ function filterByAge(age) {
 function addFullName() {
   let mappedUsers = users.map((user) => {
     let fullName = `${user.name.title}. ${user.name.first} ${user.name.last}`;
-    let mappedUser = { ...user, fullName: fullName };
-    return mappedUser;
+    let newUser = { ...user, fullName: fullName };
+    return newUser;
   });
   return mappedUsers;
 }
@@ -522,7 +518,10 @@ function addFullAddress() {
   let mappedAddresses = users.map((user) => {
     let fullAddress = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state}, ${user.location.postcode}, ${user.location.country}`;
 
-    let mappedAddress = { ...user, fullAddress: fullAddress };
+    let mappedAddress = {
+      ...user,
+      location: { ...user.location, fullAddress: fullAddress },
+    };
     return mappedAddress;
   });
   return mappedAddresses;
@@ -537,11 +536,7 @@ function addFullAddress() {
 // Filter for all users whose nat equals the provided countryCode
 
 function findAllInCountry(countryCode) {
-  let filteredCountries = users.filter((user) =>
-    user.nat === countryCode ? true : false
-  );
-
-  return filteredCountries;
+  return users.filter((user) => user.nat === countryCode);
 }
 
 // console.log(findAllInCountry("UA"));
@@ -553,12 +548,10 @@ function findAllInCountry(countryCode) {
 // Produce a list of full addresses for all users in the users list
 
 function getFullAddresses() {
-  let mappedAddressList = users.map(
+  return users.map(
     (user) =>
       `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state}, ${user.location.postcode}, ${user.location.country}`
   );
-
-  return mappedAddressList;
 }
 
 // console.log(getFullAddresses());
@@ -570,18 +563,28 @@ function getFullAddresses() {
 // Produce a list containing all pictures from all users. Hint: use the .flat() method to flatten an array of arrays into a single array
 
 function getAllPictures() {
-  let mappedPictures = users.map((user) => {
-    let mappedObj = {
-      Large: user.picture.large,
-      Medium: user.picture.medium,
-    };
+  let allPics = [];
+  users.map((user) => {
+    let updated = [
+      ...allPics,
+      user.picture.large,
+      user.picture.medium,
+      user.picture.thumbnail,
+    ];
 
-    return mappedObj;
+    allPics = updated;
+
+    // let mappedObj = {
+    //   Large: user.picture.large,
+    //   Medium: user.picture.medium,
+    // };
+
+    // return mappedObj;
   });
-  return mappedPictures;
+  return allPics;
 }
 
-console.log(getAllPictures());
+// console.log(getAllPictures());
 
 /***************************************************/
 
@@ -590,11 +593,7 @@ console.log(getAllPictures());
 // Find a particular user by phone number
 
 function findByPhone(phone) {
-  let filteredPhone = users.filter((user) =>
-    user.phone === phone || user.cell === phone ? true : false
-  );
-
-  return filteredPhone;
+  return users.filter((user) => user.phone === phone || user.cell === phone);
 }
 
 // console.log(findByPhone("(099) H45-5329"));
@@ -606,12 +605,10 @@ function findByPhone(phone) {
 // Find the index of a user by email
 
 function findIndexByEmail(email) {
-  let indexedEmail = users.indexOf(users.email);
-
-  return indexedEmail;
+  return users.findIndex((user) => user.email === email);
 }
 
-// console.log(findIndexByEmail());
+// console.log(findIndexByEmail("radomira.manuylenko@example.com"));
 
 /***************************************************/
 
@@ -620,8 +617,7 @@ function findIndexByEmail(email) {
 // Produce a list of all thumbnail links for all users
 
 function getAllThumbnails() {
-  let mappedThumbnails = users.map((user) => user.picture.thumbnail);
-  return mappedThumbnails;
+  return users.map((user) => user.picture.thumbnail);
 }
 
 // console.log(getAllThumbnails());
@@ -629,8 +625,18 @@ function getAllThumbnails() {
 /***************************************************/
 
 /**********SORT BY DOB***********/
-function sortByDob() {}
+function sortByDob() {
+  return users.sort((a, b) => {
+    let aDOB = a.dob.date;
+    let bDOB = b.dob.date;
+    return bDOB - aDOB;
+  });
+}
 
-// console.log(sortByDob());
+console.log(sortByDob());
 
 /***************************************************/
+
+/*
+
+*/
